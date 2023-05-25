@@ -4,6 +4,15 @@ import { prisma } from "./db"
 
 const getTodos = () => prisma.todo.findMany()
 
+async function toggleTodo(id: string, complete: boolean) {
+  "use server"
+
+  await prisma.todo.update({
+    where: { id },
+    data: { complete },
+  })
+}
+
 export default async function Home() {
   const todos = await getTodos()
 
@@ -25,6 +34,7 @@ export default async function Home() {
             id={todo.id}
             title={todo.title}
             complete={todo.complete}
+            toggleTodo={toggleTodo}
           />
         ))}
       </ul>
